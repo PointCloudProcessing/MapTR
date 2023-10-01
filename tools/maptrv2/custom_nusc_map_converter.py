@@ -415,7 +415,6 @@ class VectorizedLocalMap(object):
         patch_box = (map_pose[0], map_pose[1], self.patch_size[0], self.patch_size[1])
         patch_angle = quaternion_yaw(rotation) / np.pi * 180
         map_dict = {'divider':[],'ped_crossing':[],'boundary':[],'centerline':[]}
-        vectors = []
         for vec_class in self.vec_classes:
             if vec_class == 'divider':
                 line_geom = self.get_map_geom(patch_box, patch_angle, self.line_classes)
@@ -737,11 +736,18 @@ class VectorizedLocalMap(object):
                 junction_pts_list.append(tuple(end_pt))
 
         roots = (v for v, d in pts_G.in_degree() if d == 0)
-        leaves = [v for v, d in pts_G.out_degree() if d == 0]
+        leaves = (v for v, d in pts_G.out_degree() if d == 0)
         all_paths = []
+        # print("pts_G.in_degree()")
+        # print(pts_G.in_degree())
+        # print("pts_G.out_degree()")
+        # print(pts_G.out_degree())
+        # print("leaves",leaves)
+        # print("roots",roots.__dict__)
         for root in roots:
-            paths = nx.all_simple_paths(pts_G, root, leaves)
-            all_paths.extend(paths)
+            for leave in leaves:      
+                paths = nx.all_simple_paths(pts_G, root, leave)
+                all_paths.extend(paths)
 
         final_centerline_paths = []
         for path in all_paths:
@@ -776,8 +782,7 @@ def create_nuscenes_infos(root_path,
     print(version, root_path)
     nusc = NuScenes(version=version, dataroot=root_path, verbose=True)
     nusc_can_bus = NuScenesCanBus(dataroot=can_bus_root_path)
-    MAPS = ['boston-seaport', 'singapore-hollandvillage',
-                     'singapore-onenorth', 'singapore-queenstown']
+    MAPS = ['boston-seaport', 'singapore-hollandvillage', 'singapore-onenorth', 'singapore-queenstown'] 
     nusc_maps = {}
     map_explorer = {}
     for loc in MAPS:
@@ -786,7 +791,7 @@ def create_nuscenes_infos(root_path,
 
 
     from nuscenes.utils import splits
-    available_vers = ['v1.0-trainval', 'v1.0-test', 'v1.0-mini']
+    available_vers = ['v1.0-trainval', 'v1.0-test', 'v1.0-mini', 'v1.0-mini-test']
     assert version in available_vers
     if version == 'v1.0-trainval':
         train_scenes = splits.train
@@ -797,6 +802,9 @@ def create_nuscenes_infos(root_path,
     elif version == 'v1.0-mini':
         train_scenes = splits.mini_train
         val_scenes = splits.mini_val
+    elif version == 'v1.0-mini-test':
+        train_scenes = splits.mini_train
+        val_scenes = []
     else:
         raise ValueError('unknown')
 
@@ -924,7 +932,7 @@ args = parser.parse_args()
 
 
 if __name__ == '__main__':
-    train_version = f'{args.version}-trainval'
+    train_version = f'{args.version}' # -trainval
     nuscenes_data_prep(
         root_path=args.root_path,
         can_bus_root_path=args.canbus,

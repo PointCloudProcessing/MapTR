@@ -112,6 +112,10 @@ def main():
 
     # import modules from plguin/xx, registry will be updated
     if hasattr(cfg, 'plugin'):
+        import sys
+        parent_path = "/home/ld_t4/Documents/ShuoShen/MapTR"
+        if parent_path not in sys.path:
+            sys.path.append(parent_path)
         if cfg.plugin:
             import importlib
             if hasattr(cfg, 'plugin_dir'):

@@ -632,13 +632,13 @@ class VectorizedAV2LocalMap(object):
                     new_polygon = polygon.intersection(patch)
                     if not new_polygon.is_empty:
                         # import pdb;pdb.set_trace()
-                        if new_polygon.geom_type is 'Polygon':
+                        if new_polygon.geom_type == 'Polygon':
                             if not new_polygon.is_valid:
                                 continue
                             new_polygon = self.proc_polygon(new_polygon,ego_SE3_city)
                             if not new_polygon.is_valid:
                                 continue
-                        elif new_polygon.geom_type is 'MultiPolygon':
+                        elif new_polygon.geom_type == 'MultiPolygon':
                             polygons = []
                             for single_polygon in new_polygon.geoms:
                                 if not single_polygon.is_valid or single_polygon.is_empty:
@@ -654,7 +654,7 @@ class VectorizedAV2LocalMap(object):
                                 continue
                         else:
                             raise ValueError('{} is not valid'.format(new_polygon.geom_type))
-                        if new_polygon.geom_type is 'Polygon':
+                        if new_polygon.geom_type == 'Polygon':
                             new_polygon = MultiPolygon([new_polygon])
                         polygon_list.append(new_polygon)
             else:
@@ -676,13 +676,13 @@ class VectorizedAV2LocalMap(object):
             if polygon.is_valid:
                 new_polygon = polygon.intersection(patch)
                 if not new_polygon.is_empty:
-                    if new_polygon.geom_type is 'Polygon':
+                    if new_polygon.geom_type == 'Polygon':
                         if not new_polygon.is_valid:
                             continue
                         new_polygon = self.proc_polygon(new_polygon,ego_SE3_city)
                         if not new_polygon.is_valid:
                             continue
-                    elif new_polygon.geom_type is 'MultiPolygon':
+                    elif new_polygon.geom_type == 'MultiPolygon':
                         polygons = []
                         for single_polygon in new_polygon.geoms:
                             if not single_polygon.is_valid or single_polygon.is_empty:
@@ -699,7 +699,7 @@ class VectorizedAV2LocalMap(object):
                     else:
                         raise ValueError('{} is not valid'.format(new_polygon.geom_type))
 
-                    if new_polygon.geom_type is 'Polygon':
+                    if new_polygon.geom_type == 'Polygon':
                         new_polygon = MultiPolygon([new_polygon])
                     polygon_list.append(new_polygon)
         map_ped_geom.append(('ped_crossing',polygon_list))
@@ -970,7 +970,7 @@ class CustomAV2LocalMapDataset(CustomNuScenesDataset):
         Return:
             list[str]: A list of class names.
         """
-        if map_classes is None:
+        if map_classes == None:
             return cls.MAPCLASSES
 
         if isinstance(map_classes, str):
@@ -1046,7 +1046,7 @@ class CustomAV2LocalMapDataset(CustomNuScenesDataset):
         ##
 
         input_dict = self.get_data_info(index)
-        if input_dict is None:
+        if input_dict == None:
             return None
         frame_idx = input_dict['timestamp']
         scene_token = input_dict['log_id']
@@ -1055,7 +1055,7 @@ class CustomAV2LocalMapDataset(CustomNuScenesDataset):
         # import pdb;pdb.set_trace()
         example = self.vectormap_pipeline(example,input_dict)
         if self.filter_empty_gt and \
-                (example is None or ~(example['gt_labels_3d']._data != -1).any()):
+                (example == None or ~(example['gt_labels_3d']._data != -1).any()):
             return None
         data_queue.insert(0, example)
         return self.union2one(data_queue)
@@ -1199,7 +1199,7 @@ class CustomAV2LocalMapDataset(CustomNuScenesDataset):
         while True:
 
             data = self.prepare_train_data(idx)
-            if data is None:
+            if data == None:
                 idx = self._rand_another(idx)
                 continue
             return data

@@ -17,6 +17,13 @@ unzip can_bus.zip
 ```
 python tools/maptrv2/custom_nusc_map_converter.py --root-path ./data/nuscenes --out-dir ./data/nuscenes --extra-tag nuscenes --version v1.0 --canbus ./data
 ```
+```
+python tools/maptrv2/custom_nusc_map_converter.py --root-path /media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes --out-dir /media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes --extra-tag nuscenes --version v1.0 --canbus /media/NAS/raw_data/ShuoShen/nuscenes/train
+```
+``` mini
+python tools/maptrv2/custom_nusc_map_converter.py --root-path /media/NAS/raw_data/ShuoShen/nuscenes_mini --out-dir /media/NAS/raw_data/ShuoShen/nuscenes_mini --extra-tag nuscenes --version v1.0-mini --canbus /media/NAS/raw_data/ShuoShen/nuscenes/train
+```
+
 
 Using the above code will generate `nuscenes_map_infos_temporal_{train,val}.pkl`, which contain local vectorized map annotations.
 

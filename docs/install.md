@@ -18,7 +18,8 @@ pip install torch==1.9.1+cu111 torchvision==0.10.1+cu111 torchaudio==0.9.1 -f ht
 
 **c. Install gcc>=5 in conda env (optional).**
 ```shell
-conda install -c omgarcia gcc-5 # gcc-6.2
+# conda install -c omgarcia gcc-5 # gcc-6.2
+conda install -c omgarcia gcc-6.2
 ```
 
 **c. Install mmcv-full.**
@@ -69,4 +70,6 @@ cd ckpts
 wget https://download.pytorch.org/models/resnet50-19c8e357.pth
 wget https://download.pytorch.org/models/resnet18-f37072fd.pth
 ```
-
+```
+pip install numpy==1.22
+```

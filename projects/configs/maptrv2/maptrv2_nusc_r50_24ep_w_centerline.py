@@ -206,7 +206,7 @@ model = dict(
             pc_range=point_cloud_range))))
 
 dataset_type = 'CustomNuScenesOfflineLocalMapDataset'
-data_root = 'data/nuscenes/'
+data_root = '/media/NAS/raw_data/ShuoShen/nuscenes_mini/'
 file_client_args = dict(backend='disk')
 
 
@@ -250,7 +250,7 @@ test_pipeline = [
 
 data = dict(
     samples_per_gpu=4,
-    workers_per_gpu=4, # TODO
+    workers_per_gpu=1, # TODO
     train=dict(
         type=dataset_type,
         data_root=data_root,

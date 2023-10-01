@@ -72,7 +72,7 @@ model = dict(
     pretrained=dict(img='ckpts/resnet50-19c8e357.pth'),
     img_backbone=dict(
         type='ResNet',
-        depth=50,
+        depth=34,  # Original value:50
         num_stages=4,
         out_indices=(3,),
         frozen_stages=1,
@@ -206,7 +206,7 @@ model = dict(
             pc_range=point_cloud_range))))
 
 dataset_type = 'CustomNuScenesOfflineLocalMapDataset'
-data_root = 'data/nuscenes/'
+data_root = '/media/NAS/raw_data/ShuoShen/nuscenes_mini/'
 file_client_args = dict(backend='disk')
 
 
@@ -249,8 +249,8 @@ test_pipeline = [
 ]
 
 data = dict(
-    samples_per_gpu=4,
-    workers_per_gpu=4, # TODO
+    samples_per_gpu=1,
+    workers_per_gpu=1, # TODO
     train=dict(
         type=dataset_type,
         data_root=data_root,
