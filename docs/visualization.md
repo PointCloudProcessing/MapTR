@@ -10,7 +10,7 @@ export PYTHONPATH="/path/to/MapTR/"
 python tools/maptr/vis_pred.py /path/to/experiment/config /path/to/experiment/ckpt
 ```
 ```
-python tools/maptr/vis_pred.py projects/configs/maptrv2/maptrv2_nusc_r50_24ep.py pre-model/maptrv2_nusc_r50_24e.pth
+python tools/maptr/vis_pred.py projects/configs/maptr/maptr_tiny_fusion_24e.py pre-model/maptr_tiny_fusion_24e.pth
 
 ```
 **Notes**: 
