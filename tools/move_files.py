@@ -31,9 +31,9 @@ def merge_nuscene_all_file():
 
 def open_pkl():
     import pickle
-    with open('/media/NAS/raw_data/ShuoShen/VectorMapNet_data/0_Build_Dataset/map_infos.pkl', 'rb') as f:
+    with open('/media/NAS/raw_data/ShuoShen/nuscenes_mini/nuscenes_map_infos_temporal_val.pkl', 'rb') as f:
         data = pickle.load(f)
-        print(data[0].keys())
+        print(data['infos'][0].keys())
         
         
 if __name__ == '__main__':
