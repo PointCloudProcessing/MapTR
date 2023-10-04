@@ -9,6 +9,13 @@ cd /path/to/MapTR/
 export PYTHONPATH="/path/to/MapTR/"
 python tools/maptr/vis_pred.py /path/to/experiment/config /path/to/experiment/ckpt
 ```
+
+```shell
+cd /path/to/MapTR/
+export PYTHONPATH="/home/ld_t4/Documents/ShuoShen/MapTR"
+CUDA_VISIBLE_DEVICES=1 python tools/maptr/vis_pred.py projects/configs/maptr/maptr_tiny_r50_24e_t4.py pre-model/maptr_tiny_r50_24e_t4.pth
+```
+
 **Notes**: 
 
 - All the visualization samples will be saved in `/path/to/MapTR/work_dirs/experiment/vis_pred/` automatically. If you want to customize the saving path, you can add `--show-dir /customized_path`.

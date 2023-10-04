@@ -15,8 +15,14 @@ unzip can_bus.zip
 
 *We genetate custom annotation files which are different from mmdet3d's*
 ```
-python tools/create_data.py nuscenes --root-path ./data/nuscenes --out-dir ./data/nuscenes --extra-tag nuscenes --version v1.0 --canbus ./data
+python tools/create_data.py nuscenes --root-path /media/NAS/raw_data/ShuoShen/nuscenes_mini --out-dir /media/NAS/raw_data/ShuoShen/nuscenes_mini --extra-tag nuscenes --version v1.0-mini --canbus /media/NAS/raw_data/ShuoShen/nuscenes_mini
 ```
+```
+python tools/create_data.py nuscenes --root-path /media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes --out-dir /media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes --extra-tag nuscenes --version v1.0 --canbus /media/NAS/raw_data/ShuoShen/nuscenes/train/
+
+```
+
+
 
 Using the above code will generate `nuscenes_infos_temporal_{train,val}.pkl`.
 
