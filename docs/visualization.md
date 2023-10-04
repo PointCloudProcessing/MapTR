@@ -9,6 +9,10 @@ cd /path/to/MapTR/
 export PYTHONPATH="/path/to/MapTR/"
 python tools/maptr/vis_pred.py /path/to/experiment/config /path/to/experiment/ckpt
 ```
+```
+python tools/maptr/vis_pred.py projects/configs/maptrv2/maptrv2_nusc_r50_24ep.py pre-model/maptrv2_nusc_r50_24e.pth
+
+```
 **Notes**: 
 
 - All the visualization samples will be saved in `/path/to/MapTR/work_dirs/experiment/vis_pred/` automatically. If you want to customize the saving path, you can add `--show-dir /customized_path`.
