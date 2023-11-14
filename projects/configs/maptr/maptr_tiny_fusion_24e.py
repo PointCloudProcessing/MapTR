@@ -9,8 +9,9 @@ plugin_dir = 'projects/mmdet3d_plugin/'
 # If point cloud range is changed, the models should also change their point
 # cloud range accordingly
 # point_cloud_range = [-51.2, -51.2, -5.0, 51.2, 51.2, 3.0]
-point_cloud_range = [-15.0, -30.0, -2.0, 15.0, 30.0, 2.0]
-lidar_point_cloud_range = [-15.0, -30.0, -5.0, 15.0, 30.0, 3.0]
+# point_cloud_range = [-15.0, -30.0, -2.0, 15.0, 30.0, 2.0]
+point_cloud_range = [-15.0, -0.0, -2.0, 15.0, 30.0, 2.0]
+lidar_point_cloud_range = [-15.0, -0.0, -5.0, 15.0, 30.0, 3.0]
 voxel_size = [0.1, 0.1, 0.2]
 
 
@@ -26,8 +27,9 @@ class_names = [
 ]
 # map has classes: divider, ped_crossing, boundary
 map_classes = ['divider', 'ped_crossing','boundary']
+# map_classes = ['boundary']
+
 # fixed_ptsnum_per_line = 20
-# map_classes = ['divider',]
 fixed_ptsnum_per_gt_line = 20 # now only support fixed_pts > 0
 fixed_ptsnum_per_pred_line = 20
 eval_use_same_gt_sample_num_flag=True
@@ -108,6 +110,7 @@ model = dict(
         code_weights=[1.0, 1.0, 1.0, 1.0],
         transformer=dict(
             type='MapTRPerceptionTransformer',
+            use_cams_embeds=False,
             rotate_prev_bev=True,
             use_shift=True,
             use_can_bus=True,
@@ -213,7 +216,7 @@ model = dict(
             pc_range=point_cloud_range))))
 
 dataset_type = 'CustomNuScenesLocalMapDataset'
-data_root = 'data/nuscenes/'
+data_root = '/media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes/'
 file_client_args = dict(backend='disk')
 
 reduce_beams=32
@@ -259,8 +262,8 @@ test_pipeline = [
 ]
 
 data = dict(
-    samples_per_gpu=4,
-    workers_per_gpu=4,
+    samples_per_gpu=3,
+    workers_per_gpu=1,
     train=dict(
         type=dataset_type,
         data_root=data_root,
@@ -308,25 +311,29 @@ data = dict(
 
 optimizer = dict(
     type='AdamW',
-    lr=6e-4,
+    lr=5e-4,  # This sets the initial learning rate for the optimizer to 6e-4. The learning rate determines the step size during gradient descent
     paramwise_cfg=dict(
         custom_keys={
-            'img_backbone': dict(lr_mult=0.1),
+            'img_backbone': dict(lr_mult=0.1), # the learning rate is multiplied by 0.1, meaning it will be 10 times smaller than the base learning rate (6e-4)
         }),
-    weight_decay=0.01)
+    weight_decay=0.01) # controls the L2 regularization strength (weight decay). It applies a penalty to the model's weights to discourage them from becoming too large
 
-optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
+optimizer_config = dict(grad_clip= # which is a technique used to prevent gradients from becoming too large and potentially causing numerical instability 
+                        dict(max_norm=30,  # This sets the maximum L2 norm of gradients to 35. If any gradient's L2 norm exceeds this value, it will be scaled down to ensure it does not exceed this threshold.
+                                       norm_type=2)) # This specifies the type of norm
 # learning policy
 lr_config = dict(
     policy='CosineAnnealing',
     warmup='linear',
-    warmup_iters=500,
-    warmup_ratio=1.0 / 3,
-    min_lr_ratio=1e-3)
+    warmup_iters=500, #  specifies the number of initial iterations during which the learning rate gradually increases from its initial value to the regular learning rate.
+    warmup_ratio=1.0 / 2, # specifies the ratio of the initial learning rate to the regular learning rate. A larger warmup_ratio means a longer warm-up phase, during which the learning rate increases gradually. This can be useful to ensure the model starts with a very low learning rate and spends a significant portion of training with smaller steps.
+    min_lr_ratio=1e-4) # Setting a non-zero min_lr_ratio prevents the learning rate from becoming too small
 total_epochs = 24
 # total_epochs = 50
 # evaluation = dict(interval=1, pipeline=test_pipeline)
-evaluation = dict(interval=2, pipeline=test_pipeline, metric='chamfer')
+evaluation = dict(interval=2, 
+                  pipeline=test_pipeline, 
+                  metric='chamfer')
 
 runner = dict(type='EpochBasedRunner', max_epochs=total_epochs)
 
@@ -336,7 +343,8 @@ log_config = dict(
         dict(type='TextLoggerHook'),
         dict(type='TensorboardLoggerHook')
     ])
-fp16 = dict(loss_scale=512.)
+# fp16 = dict(loss_scale=512.) original
+fp16 = dict(loss_scale=256.) 
 checkpoint_config = dict(interval=1)
 find_unused_parameters=True
 

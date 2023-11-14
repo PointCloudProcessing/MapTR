@@ -13,7 +13,24 @@ python tools/maptr/vis_pred.py /path/to/experiment/config /path/to/experiment/ck
 ```shell
 cd /path/to/MapTR/
 export PYTHONPATH="/home/ld_t4/Documents/ShuoShen/MapTR"
-CUDA_VISIBLE_DEVICES=1 python tools/maptr/vis_pred.py projects/configs/maptr/maptr_tiny_r50_24e_t4.py pre-model/maptr_tiny_r50_24e_t4.pth
+CUDA_VISIBLE_DEVICES=1 python tools/maptr/vis_pred_1camera.py projects/configs/maptr/maptr_tiny_fusion_24e_numcams_1.py work_dirs/maptr_tiny_fusion_24e_numcams_1/epoch_100.pth
+```
+
+```shell
+cd /path/to/MapTR/
+export PYTHONPATH="/home/ld_t4/Documents/ShuoShen/MapTR"
+CUDA_VISIBLE_DEVICES=1 python tools/maptr/vis_pred_1camera.py projects/configs/maptr/maptr_tiny_fusion_24e_numcams_2.py work_dirs/maptr_tiny_fusion_24e_numcams_2/latest.pth
+```
+
+```shell
+CUDA_VISIBLE_DEVICES=1 python tools/maptr/vis_pred.py projects/configs/maptr/maptr_tiny_fusion_24e.py pre-model/maptr_tiny_fusion_24e.pth
+```
+
+```shell
+CUDA_VISIBLE_DEVICES=1 python tools/maptr/vis_pred.py projects/configs/maptr/maptr_tiny_fusion_24e_numcams1_1w_1.py work_dirs/maptr_tiny_fusion_24e_numcams1_1w_1/latest.pth
+```
+```
+python tools/maptr/vis_pred_1camera.py projects/configs/maptr/maptr_tiny_fusion_24e_numcams_full1.py work_dirs/maptr_tiny_fusion_24e_numcams_full1/latest.pth
 ```
 
 **Notes**: 
@@ -31,3 +48,7 @@ python tools/maptr/generate_video.py /path/to/visualization/directory
 ```
 **Notes**: 
 - The video will be saved in `/path/to/MapTR/work_dirs/experiment/`
+
+# Error
+## ModuleNotFoundError: No module named 'cv_bridge'
+`export PYTHONPATH=$PYTHONPATH:/opt/ros/melodic/lib/python2.7/dist-packages`

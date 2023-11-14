@@ -25,6 +25,17 @@ import json
 
 
 def add_rotation_noise(extrinsics, std=0.01, mean=0.0):
+    """
+    Adds rotation noise to the extrinsics matrix.
+
+    Args:
+        extrinsics (numpy.ndarray): The extrinsics matrix to add noise to.
+        std (float): The standard deviation of the noise to add. Default is 0.01.
+        mean (float): The mean of the noise to add. Default is 0.0.
+
+    Returns:
+        numpy.ndarray: The extrinsics matrix with rotation noise added.
+    """
     #n = extrinsics.shape[0]
     noise_angle = torch.normal(mean, std=std, size=(3,))
     # extrinsics[:, 0:3, 0:3] *= (1 + noise)
@@ -794,7 +805,7 @@ class VectorizedLocalMap(object):
                                                       origin=(patch_x, patch_y), use_radians=False)
                         new_polygon = affinity.affine_transform(new_polygon,
                                                                 [1.0, 0.0, 0.0, 1.0, -patch_x, -patch_y])
-                        if new_polygon.geom_type is 'Polygon':
+                        if new_polygon.geom_type == 'Polygon':
                             new_polygon = MultiPolygon([new_polygon])
                         polygon_list.append(new_polygon)
 
@@ -809,7 +820,7 @@ class VectorizedLocalMap(object):
                                                       origin=(patch_x, patch_y), use_radians=False)
                         new_polygon = affinity.affine_transform(new_polygon,
                                                                 [1.0, 0.0, 0.0, 1.0, -patch_x, -patch_y])
-                        if new_polygon.geom_type is 'Polygon':
+                        if new_polygon.geom_type == 'Polygon':
                             new_polygon = MultiPolygon([new_polygon])
                         polygon_list.append(new_polygon)
 
@@ -819,7 +830,7 @@ class VectorizedLocalMap(object):
         if layer_name not in self.map_explorer[location].map_api.non_geometric_line_layers:
             raise ValueError("{} is not a line layer".format(layer_name))
 
-        if layer_name is 'traffic_light':
+        if layer_name == 'traffic_light':
             return None
 
         patch_x = patch_box[0]
@@ -860,7 +871,7 @@ class VectorizedLocalMap(object):
                                                       origin=(patch_x, patch_y), use_radians=False)
                     new_polygon = affinity.affine_transform(new_polygon,
                                                             [1.0, 0.0, 0.0, 1.0, -patch_x, -patch_y])
-                    if new_polygon.geom_type is 'Polygon':
+                    if new_polygon.geom_type == 'Polygon':
                         new_polygon = MultiPolygon([new_polygon])
                     polygon_list.append(new_polygon)
 
@@ -954,7 +965,7 @@ class CustomNuScenesLocalMapDataset(CustomNuScenesDataset):
         Return:
             list[str]: A list of class names.
         """
-        if map_classes is None:
+        if map_classes == None:
             return cls.MAPCLASSES
 
         if isinstance(map_classes, str):
@@ -966,6 +977,7 @@ class CustomNuScenesLocalMapDataset(CustomNuScenesDataset):
             raise ValueError(f'Unsupported type {type(map_classes)} of map classes.')
 
         return class_names
+    
     def vectormap_pipeline(self, example, input_dict):
         '''
         `example` type: <class 'dict'>
@@ -1033,13 +1045,13 @@ class CustomNuScenesLocalMapDataset(CustomNuScenesDataset):
         for i in index_list:
             i = max(0, i)
             input_dict = self.get_data_info(i)
-            if input_dict is None:
+            if input_dict == None:
                 return None
             self.pre_pipeline(input_dict)
             example = self.pipeline(input_dict)
             example = self.vectormap_pipeline(example,input_dict)
             if self.filter_empty_gt and \
-                    (example is None or ~(example['gt_labels_3d']._data != -1).any()):
+                    (example == None or ~(example['gt_labels_3d']._data != -1).any()):
                 return None
             queue.append(example)
         return self.union2one(queue)
@@ -1226,7 +1238,7 @@ class CustomNuScenesLocalMapDataset(CustomNuScenesDataset):
         while True:
 
             data = self.prepare_train_data(idx)
-            if data is None:
+            if data == None:
                 idx = self._rand_another(idx)
                 continue
             return data
@@ -1370,6 +1382,7 @@ class CustomNuScenesLocalMapDataset(CustomNuScenesDataset):
         detail = dict()
         
         print('Formating results & gts by classes')
+        print(result_path)
         with open(result_path,'r') as f:
             pred_results = json.load(f)
         gen_results = pred_results['results']
@@ -1394,7 +1407,7 @@ class CustomNuScenesLocalMapDataset(CustomNuScenesDataset):
             print('-*'*10+f'use metric:{metric}'+'-*'*10)
 
             if metric == 'chamfer':
-                thresholds = [0.5,1.0,1.5]
+                thresholds = [1.0, 2.0, 3.0]
             elif metric == 'iou':
                 thresholds= np.linspace(.5, 0.95, int(np.round((0.95 - .5) / .05)) + 1, endpoint=True)
             cls_aps = np.zeros((len(thresholds),self.NUM_MAPCLASSES))

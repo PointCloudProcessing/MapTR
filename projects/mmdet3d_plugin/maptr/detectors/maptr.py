@@ -80,12 +80,13 @@ class MapTR(MVXTwoStageDetector):
             # # update real input shape of each single img
             # for img_meta in img_metas:
             #     img_meta.update(input_shape=input_shape)
-
             if img.dim() == 5 and img.size(0) == 1:
                 img.squeeze_()
             elif img.dim() == 5 and img.size(0) > 1:
                 B, N, C, H, W = img.size()
-                img = img.reshape(B * N, C, H, W)
+                img = img.reshape(B * N, C, H, W)  #  B（批次数）、N（Camera数量）、C（通道数）、H（高度）、W（宽度）
+            if(img.dim() == 3):
+                img = img.unsqueeze(0)
             if self.use_grid_mask:
                 img = self.grid_mask(img)
 
@@ -274,7 +275,7 @@ class MapTR(MVXTwoStageDetector):
         
         img_metas = [each[len_queue-1] for each in img_metas]
         if not img_metas[0]['prev_bev_exists']:
-            prev_bev = None
+            prev_bev = None  
         img_feats = self.extract_feat(img=img, img_metas=img_metas)
         losses = dict()
         losses_pts = self.forward_pts_train(img_feats, lidar_feat, gt_bboxes_3d,
@@ -284,7 +285,8 @@ class MapTR(MVXTwoStageDetector):
         losses.update(losses_pts)
         return losses
 
-    def forward_test(self, img_metas, img=None,points=None,  **kwargs):
+    def forward_test(self, img_metas, img=None,points=None,  **kwargs): # forward_test分为带数据增强和不带数据增强两种。
+        """Test function without augmentaiton."""
         for var, name in [(img_metas, 'img_metas')]:
             if not isinstance(var, list):
                 raise TypeError('{} must be a list, but got {}'.format(

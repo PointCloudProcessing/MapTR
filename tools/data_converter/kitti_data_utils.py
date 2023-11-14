@@ -26,11 +26,11 @@ def get_kitti_info_path(idx,
     img_idx_str += file_tail
     prefix = Path(prefix)
     if training:
-        file_path = Path('training') / info_type / img_idx_str
+        file_path = Path('training') / info_type / ("um_" + img_idx_str)
     else:
-        file_path = Path('testing') / info_type / img_idx_str
+        file_path = Path('testing') / info_type / ("um_" + img_idx_str)
     if exist_check and not (prefix / file_path).exists():
-        raise ValueError('file not exist: {}'.format(file_path))
+        raise ValueError('file not exist: {}'.format((prefix / file_path)))
     if relative_path:
         return str(file_path)
     else:

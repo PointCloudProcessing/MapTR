@@ -17,10 +17,17 @@ unzip can_bus.zip
 ```
 python tools/create_data.py nuscenes --root-path /media/NAS/raw_data/ShuoShen/nuscenes_mini --out-dir /media/NAS/raw_data/ShuoShen/nuscenes_mini --extra-tag nuscenes --version v1.0-mini --canbus /media/NAS/raw_data/ShuoShen/nuscenes_mini
 ```
-```
-python tools/create_data.py nuscenes --root-path /media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes --out-dir /media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes --extra-tag nuscenes --version v1.0 --canbus /media/NAS/raw_data/ShuoShen/nuscenes/train/
 
 ```
+python tools/create_data.py nuscenes --root-path /media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes --out-dir /media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes/config/nuscenes_full_1camera --extra-tag nuscenes --version v1.0 --canbus /media/NAS/raw_data/ShuoShen/nuscenes/train/
+```
+
+```
+python tools/create_data.py kitti --root-path /media/NAS/raw_data/ShuoShen/kitti/data --out-dir /media/NAS/raw_data/ShuoShen/kitti/data --extra-tag kitti --version mask
+```
+
+
+# Change camera data
 
 
 

@@ -1,0 +1,11 @@
+numba==0.48.0
+numpy==1.21.6
+llvmlite==0.31.0
+tensorboard==2.4.1
+tensorboard==2.14.0
+tensorboard-data-server==0.7.1
+torch==1.9.0+cu111
+torch-scatter==2.1.1
+torchvision==0.10.0+cu111
+tornado==6.3.3
+networkx==2.2

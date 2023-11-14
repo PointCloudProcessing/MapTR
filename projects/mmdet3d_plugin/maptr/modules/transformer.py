@@ -176,8 +176,11 @@ class MapTRPerceptionTransformer(BaseModule):
         spatial_shapes = []
         for lvl, feat in enumerate(mlvl_feats):
             bs, num_cam, c, h, w = feat.shape
+            # print("feat1",feat.shape)
             spatial_shape = (h, w)
-            feat = feat.flatten(3).permute(1, 0, 3, 2)
+            feat = feat.flatten(3).permute(1, 0, 3, 2) # num_cam, bs, h*w, c
+            # print("feat after flatten",feat.shape)
+            # print(self.cams_embeds.shape)  # 6, 256
             if self.use_cams_embeds:
                 feat = feat + self.cams_embeds[:, None, None, :].to(feat.dtype)
             feat = feat + self.level_embeds[None,
@@ -208,7 +211,8 @@ class MapTRPerceptionTransformer(BaseModule):
             **kwargs
         )
         return bev_embed
-
+        # 将所有处理后的特征拼接在一起，然后传递给 encoder 模型，以生成最终的BEV编码特征 bev_embed。
+        
     def lss_bev_encode(
             self,
             mlvl_feats,

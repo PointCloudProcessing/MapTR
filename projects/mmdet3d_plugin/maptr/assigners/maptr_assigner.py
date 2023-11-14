@@ -9,6 +9,7 @@ try:
     from scipy.optimize import linear_sum_assignment
 except ImportError:
     linear_sum_assignment = None
+import numpy as np
 
 def normalize_2d_bbox(bboxes, pc_range):
 
@@ -172,8 +173,18 @@ class MapTRAssigner(BaseAssigner):
         bboxes = denormalize_2d_bbox(bbox_pred, self.pc_range)
         iou_cost = self.iou_cost(bboxes, gt_bboxes)
         # weighted sum of above three costs
-        cost = cls_cost + reg_cost + iou_cost + pts_cost
         
+        cost = cls_cost + reg_cost + iou_cost + pts_cost
+        # print("len(cls_pred)",len(cls_pred))
+        # print("len(gt_labels)",len(gt_labels))
+        if torch.isnan(cost).any() or torch.isinf(cost).any():
+            print("cls_cost",cls_cost)
+            print("reg_cost",reg_cost)
+            print("iou_cost",iou_cost)
+            print("pts_cost",pts_cost)
+            print("type(cls_pred)",type(cls_pred))
+
+ 
         # 3. do Hungarian matching on CPU using linear_sum_assignment
         cost = cost.detach().cpu()
         if linear_sum_assignment is None:

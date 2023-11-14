@@ -199,7 +199,7 @@ def _fill_trainval_infos(nusc,
     train_nusc_infos = []
     val_nusc_infos = []
     frame_idx = 0
-    for sample in mmcv.track_iter_progress(nusc.sample):
+    for sample in mmcv.track_iter_progress(nusc.sample):   # length of trainng set  [0:10000]
         map_location = nusc.get('log', nusc.get('scene', sample['scene_token'])['log_token'])['location']
 
         lidar_token = sample['data']['LIDAR_TOP']
@@ -219,7 +219,7 @@ def _fill_trainval_infos(nusc,
             'next': sample['next'],
             'can_bus': can_bus,
             'frame_idx': frame_idx,  # temporal related info
-            'sweeps': [],
+            'sweeps': [],  # previous data
             'cams': dict(),
             'map_location': map_location,
             'scene_token': sample['scene_token'],  # temporal related info
@@ -245,11 +245,11 @@ def _fill_trainval_infos(nusc,
         # obtain 6 image's information per frame
         camera_types = [
             'CAM_FRONT',
-            'CAM_FRONT_RIGHT',
-            'CAM_FRONT_LEFT',
-            'CAM_BACK',
-            'CAM_BACK_LEFT',
-            'CAM_BACK_RIGHT',
+            # 'CAM_FRONT_RIGHT',
+            # 'CAM_FRONT_LEFT',
+            # 'CAM_BACK',
+            # 'CAM_BACK_LEFT',
+            # 'CAM_BACK_RIGHT',
         ]
         for cam in camera_types:
             cam_token = sample['data'][cam]
@@ -394,11 +394,11 @@ def export_2d_annotation(root_path, info_path, version, mono3d=True):
     # get bbox annotations for camera
     camera_types = [
         'CAM_FRONT',
-        'CAM_FRONT_RIGHT',
-        'CAM_FRONT_LEFT',
-        'CAM_BACK',
-        'CAM_BACK_LEFT',
-        'CAM_BACK_RIGHT',
+        # 'CAM_FRONT_RIGHT',
+        # 'CAM_FRONT_LEFT',
+        # 'CAM_BACK',
+        # 'CAM_BACK_LEFT',
+        # 'CAM_BACK_RIGHT',
     ]
     nusc_infos = mmcv.load(info_path)['infos']
     nusc = NuScenes(version=version, dataroot=root_path, verbose=True)

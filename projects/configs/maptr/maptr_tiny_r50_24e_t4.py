@@ -189,7 +189,7 @@ model = dict(
             pc_range=point_cloud_range))))
 
 dataset_type = 'CustomNuScenesLocalMapDataset'
-data_root = '/media/NAS/raw_data/ShuoShen/nuscenes/train/nuscenes/'
+data_root = 'data/nuscenes/'
 file_client_args = dict(backend='disk')
 
 
@@ -227,8 +227,8 @@ test_pipeline = [
 ]
 
 data = dict(
-    samples_per_gpu=3,
-    workers_per_gpu=1,
+    samples_per_gpu=4,
+    workers_per_gpu=4,
     train=dict(
         type=dataset_type,
         data_root=data_root,
@@ -291,7 +291,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=1.0 / 3,
     min_lr_ratio=1e-3)
-total_epochs = 100
+total_epochs = 24
 # total_epochs = 50
 # evaluation = dict(interval=1, pipeline=test_pipeline)
 evaluation = dict(interval=2, pipeline=test_pipeline, metric='chamfer')
@@ -299,7 +299,7 @@ evaluation = dict(interval=2, pipeline=test_pipeline, metric='chamfer')
 runner = dict(type='EpochBasedRunner', max_epochs=total_epochs)
 
 log_config = dict(
-    interval=5,
+    interval=50,
     hooks=[
         dict(type='TextLoggerHook'),
         dict(type='TensorboardLoggerHook')

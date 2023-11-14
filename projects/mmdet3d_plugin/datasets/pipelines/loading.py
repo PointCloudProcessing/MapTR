@@ -365,4 +365,3 @@ class CustomLoadPointsFromFile:
         results["points"] = points
 
         return results
-

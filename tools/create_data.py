@@ -285,19 +285,19 @@ if __name__ == '__main__':
             out_dir=args.out_dir,
             workers=args.workers,
             max_sweeps=args.max_sweeps)
-    elif args.dataset == 'scannet':
+    elif args.dataset == 'scannet':  # indoor
         scannet_data_prep(
             root_path=args.root_path,
             info_prefix=args.extra_tag,
             out_dir=args.out_dir,
             workers=args.workers)
-    elif args.dataset == 's3dis':
+    elif args.dataset == 's3dis': #indoor
         s3dis_data_prep(
             root_path=args.root_path,
             info_prefix=args.extra_tag,
             out_dir=args.out_dir,
             workers=args.workers)
-    elif args.dataset == 'sunrgbd':
+    elif args.dataset == 'sunrgbd': #indoor
         sunrgbd_data_prep(
             root_path=args.root_path,
             info_prefix=args.extra_tag,
